@@ -22,7 +22,7 @@ function initThreeJS() {
   }
 
   // WebSocket connection to receive accelerometer data
-  var socket = new WebSocket('ws://' + window.location.hostname + ':5678');
+  var socket = new WebSocket('ws://' + window.location.hostname + ':50100');
   socket.onmessage = function (event) {
     var data = JSON.parse(event.data);
     console.log("socket data",data)
