@@ -9,6 +9,15 @@ from modules.recognize import recognize_from_audio
 app = Flask(__name__)
 socketio = SocketIO(app)
 
+# Importing Adafruit library for the accelerometer
+import board
+import busio
+import adafruit_adxl34x
+
+# Initialize I2C bus and accelerometer
+i2c = busio.I2C(board.SCL, board.SDA)
+accelerometer = adafruit_adxl34x.ADXL345(i2c)
+
 # Global variables to store audio source information
 audio_source = "Default"  # Default audio device or WebSocket
 connected_clients = set()
@@ -16,6 +25,14 @@ connected_clients = set()
 # Global variable to store the last recognition time
 last_recognition_time = 0
 
+# Function to read accelerometer data and send it via WebSocket
+def send_acceleration_data():
+    while True:
+        print("reading acceleration_data .. ")
+        x, y, z = accelerometer.acceleration
+        print("sending acceleration_data .. " + {'x': x, 'y': y, 'z': z})
+        socketio.emit('acceleration_data', {'x': x, 'y': y, 'z': z}, namespace='/audio')
+        time.sleep(0.1)  # Adjust the delay time as needed
 
 # dynamically select audio source
 @socketio.on('change_source', namespace='/audio')
@@ -24,6 +41,7 @@ def change_source(data):
     audio_source = data['source']
     emit('source_info', {'source': audio_source, 'clients': len(connected_clients)}, namespace='/audio')
 
+# Function to stream audio
 def stream_audio():
     CHUNK = 1024
     FORMAT = pyaudio.paInt16
@@ -82,8 +100,12 @@ def connect():
 def disconnect():
     connected_clients.remove(request.sid)
     emit('source_info', {'source': audio_source, 'clients': len(connected_clients)})
+
 def main():
-    #setup_led()
+    # Start the thread to send accelerometer data
+    accelerometer_thread = threading.Thread(target=send_acceleration_data)
+    accelerometer_thread.daemon = True
+    accelerometer_thread.start()
 
     try:
         print("Voice assistant is running. Press ESC to exit.")
@@ -93,6 +115,7 @@ def main():
         stream_audio()
     finally:
         print("Voice assistant has shut down.")
+
 if __name__ == '__main__':
     main()
     socketio.run(app, debug=True)

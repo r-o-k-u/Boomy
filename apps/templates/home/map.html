@@ -35,10 +35,46 @@
 
     {% include "includes/sidebar.html" %}
 
-    <main class="main-content mt-1 border-radius-lg">
+    <main class="main-content mt-0 border-radius-lg">
 
       <div class="section min-vh-85 position-relative transform-scale-0 transform-scale-md-7">
-        <div class="container"></div>
+        <div class="container-fluid ">
+
+          <div class="row mt-4">
+            <div class="col-lg-6 mb-lg-0 mb-4">
+              <div class="card">
+                <div class="card-body p-3">
+                  <div class="row">
+                    <div class="col-lg-4">
+                      <div class="d-flex flex-column h-100">
+                        <h5 class="font-weight-bolder">Boomy Orientation</h5>
+                        <p class="mb-5">3D element showing boomy's position in 3D space .</p>
+                        <a class="text-body text-sm font-weight-bold mb-0 icon-move-right mt-auto" href="javascript:;">
+                          Calibrate
+                          <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
+                        </a>
+                      </div>
+                    </div>
+                    <div class="col-lg-8 ms-auto text-center mt-5 mt-lg-0">
+                      <!-- <div class="bg-gradient-primary border-radius-lg h-100">
+                        <img src="{{ config.ASSETS_ROOT }}/img/shapes/waves-white.svg" class="position-absolute h-100 w-50 top-0 d-lg-block d-none" alt="waves">
+                        <div class="position-relative d-flex align-items-center justify-content-center h-100">
+                          <img class="w-100 position-relative z-index-2 pt-4" src="{{ config.ASSETS_ROOT }}/img/illustrations/rocket-white.png" alt="rocket">
+                        </div>
+                      </div> -->
+                      <div id="coordinateDisplay" style="position: absolute; top: 20px; left: 20px; color: white;"></div>
+                       <!-- Container for Three.js object -->
+                      <div id="threejs3dobject" class="col-lg-8 ms-auto text-center mt-5 mt-lg-0">
+                        <!-- Placeholder for Three.js object -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    
+        </div>
       </div>
     
     </main>
@@ -67,6 +103,7 @@
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="{{ config.ASSETS_ROOT }}/js/boomy-dashboard.min.js?v=1.0.6"></script>
+  <script src="{{ config.ASSETS_ROOT }}/js/three.js"></script>
 
 </body>
 </html>
